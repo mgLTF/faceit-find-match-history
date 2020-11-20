@@ -1,20 +1,20 @@
 import json
 import requests
-import config
 import math
 import sys
 from requests.auth import HTTPBasicAuth
 from pprint import pprint
 
-url = "https://open.faceit.com/data/v4/" 
-headers = {'Authorization': 'Bearer ' + config.API_KEY}
+URL = "https://open.faceit.com/data/v4/"
+API_KEY = "ec7bd30e-26b9-484d-ae61-0fdbe159668a"
+headers = {'Authorization': 'Bearer ' + API_KEY}
 
 #TODO: flag para checkar pelo jogador q quiser
 #TODO: flag para mudar o n de jogos
 
 # returns playerID from playerNickname. Returns None if player wasn't found
 def get_player_id(player_nickname):
-    req = requests.get("{}players?nickname={}&game=csgo".format(url, player_nickname), headers=headers)
+    req = requests.get("{}players?nickname={}&game=csgo".format(URL, player_nickname), headers=headers)
     if req.status_code == 200:
         id = req.json()["player_id"]
         return id
@@ -23,14 +23,14 @@ def get_player_id(player_nickname):
 
 # returns amount of matches from given player
 def get_number_of_matches(player_id):
-    req = requests.get("{}players/{}/stats/csgo".format(url, player_id), headers=headers)
+    req = requests.get("{}players/{}/stats/csgo".format(URL, player_id), headers=headers)
     
     if req.status_code == 200:
         return int(req.json()["lifetime"]["Matches"])
     return None
 
 def get_last_matches(playerID, off, n):
-    req = requests.get("{}players/{}/history?game=csgo&offset={}&limit={}&from=0".format(url, playerID, off, n), headers=headers)
+    req = requests.get("{}players/{}/history?game=csgo&offset={}&limit={}&from=0".format(URL, playerID, off, n), headers=headers)
     
     if req.status_code == 200:
         matches = req.json()
@@ -45,6 +45,7 @@ if __name__ == "__main__":
         print("USAGE: python3 main.py [player1] [player2]")
         sys.exit(1)
 
+    
     player1 = sys.argv[1]
     player2 = sys.argv[2]
     
